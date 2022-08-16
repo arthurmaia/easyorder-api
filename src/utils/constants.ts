@@ -23,3 +23,5 @@ export const CategoryDescriptions = {
 	[CategoryEnum.DRINKS]: 'Bebidas',
 	[CategoryEnum.DESSERTS]: 'Sobremesas',
 };
+
+export const defaultProductImageUrl = 'https://i.imgur.com/pDWhieg.jpg';

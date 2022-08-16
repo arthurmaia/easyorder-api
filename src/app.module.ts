@@ -10,6 +10,8 @@ import { OrderStatus } from './order-status/order-status.entity';
 import { OrderStatusModule } from './order-status/order-status.module';
 import { Order } from './order/order.entity';
 import { OrderModule } from './order/order.module';
+import { Product } from './product/product.entity';
+import { ProductModule } from './product/product.module';
 import { User } from './user/user.entity';
 import { UserModule } from './user/user.module';
 
@@ -18,7 +20,7 @@ import { UserModule } from './user/user.module';
 		TypeOrmModule.forRoot({
 			type: 'postgres',
 			url: 'postgres://postgres:postgres@localhost:5432/easyorder-db',
-			entities: [User, Category, OrderStatus, Order],
+			entities: [User, Category, OrderStatus, Order, Product],
 			synchronize: true,
 		}),
 		UserModule,
@@ -26,6 +28,7 @@ import { UserModule } from './user/user.module';
 		CategoryModule,
 		OrderStatusModule,
 		OrderModule,
+		ProductModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
 import { OrderStatus } from 'src/order-status/order-status.entity';
-import { OrderStatusRepository } from 'src/order-status/order-status.repository';
 import { OrderStatusEnum } from 'src/utils/constants';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { PublicOrderDto } from './dto/public-order.dto';
@@ -10,10 +9,7 @@ import { OrderRepository } from './order.repository';
 
 @Injectable()
 export class OrderService {
-	constructor(
-		private orderRepository: OrderRepository,
-		private orderStatusRepository: OrderStatusRepository
-	) {}
+	constructor(private orderRepository: OrderRepository) {}
 
 	async createOrder(body: CreateOrderDto): Promise<Order> {
 		const order = new Order();
