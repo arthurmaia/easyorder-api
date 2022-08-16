@@ -17,7 +17,7 @@ import { UserModule } from './user/user.module';
 	imports: [
 		TypeOrmModule.forRoot({
 			type: 'postgres',
-			url: 'postgres://postgres:postgres@postgresdb:5432/easyorder-db',
+			url: 'postgres://postgres:postgres@localhost:5432/easyorder-db',
 			entities: [User, Category, OrderStatus, Order],
 			synchronize: true,
 		}),

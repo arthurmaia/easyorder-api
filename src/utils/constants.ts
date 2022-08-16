@@ -9,3 +9,17 @@ export const OrderStatusDescriptions = {
 	[OrderStatusEnum.PENDING]: 'Em Andamento',
 	[OrderStatusEnum.CANCELED]: 'Cancelado',
 };
+
+export enum CategoryEnum {
+	LUNCHES = 1,
+	SAVORY = 2,
+	DRINKS = 3,
+	DESSERTS = 4,
+}
+
+export const CategoryDescriptions = {
+	[CategoryEnum.LUNCHES]: 'Lanches',
+	[CategoryEnum.SAVORY]: 'Salgados',
+	[CategoryEnum.DRINKS]: 'Bebidas',
+	[CategoryEnum.DESSERTS]: 'Sobremesas',
+};
