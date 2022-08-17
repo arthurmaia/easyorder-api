@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 
 import { ProductRepository } from './product.repository';
 import { Product } from './product.entity';
@@ -59,7 +59,7 @@ export class ProductService {
 		});
 
 		if (!category) {
-			throw new Error('Categoria não encontrada!');
+			throw new HttpException(`Categoria ${categoryId} inexistente!`, 400);
 		}
 
 		const newProduct = new Product();

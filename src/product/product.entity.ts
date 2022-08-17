@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import { Category } from 'src/category/category.entity';
 import { defaultProductImageUrl } from 'src/utils/constants';
@@ -20,9 +21,12 @@ export class Product {
 	@Column({ default: false })
 	blocked: boolean;
 
+	@Exclude()
 	@ManyToOne(_type => Category, category => category.products)
 	category: Category;
 
 	@Column({ default: defaultProductImageUrl })
 	imageUrl: string;
+
+	categoryId?: string;
 }
