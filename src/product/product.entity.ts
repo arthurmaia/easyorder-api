@@ -13,6 +13,9 @@ export class Product {
 	name: string;
 
 	@Column()
+	description: string;
+
+	@Column()
 	value: number;
 
 	@Column({ default: true })

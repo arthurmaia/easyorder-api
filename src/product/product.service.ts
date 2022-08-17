@@ -28,6 +28,7 @@ export class ProductService {
 		publicProduct.imageUrl = product.imageUrl;
 		publicProduct.hasStock = product.hasStock;
 		publicProduct.blocked = product.blocked;
+		publicProduct.description = product.description;
 
 		return publicProduct;
 	}
@@ -40,13 +41,8 @@ export class ProductService {
 		return products.map(
 			product =>
 				({
-					id: product.id,
-					name: product.name,
-					value: product.value,
+					...product,
 					category: product.category.name,
-					imageUrl: product.imageUrl,
-					hasStock: product.hasStock,
-					blocked: product.blocked,
 				} as PublicProductDto)
 		);
 	}
@@ -66,6 +62,7 @@ export class ProductService {
 
 		newProduct.name = product.name;
 		newProduct.value = product.value;
+		newProduct.description = product.description;
 		newProduct.category = category;
 
 		const includedProduct = await this.productRepository.save(newProduct);
@@ -79,7 +76,37 @@ export class ProductService {
 		publicProduct.imageUrl = includedProduct.imageUrl;
 		publicProduct.hasStock = includedProduct.hasStock;
 		publicProduct.blocked = includedProduct.blocked;
+		publicProduct.description = includedProduct.description;
 
 		return publicProduct;
+	}
+
+	async getProductsByCategory(categoryId: number): Promise<PublicProductDto[]> {
+		const category = await this.categoryRepository.findOne({
+			where: { id: categoryId },
+		});
+
+		if (!category) {
+			throw new HttpException(`Categoria ${categoryId} inexistente!`, 400);
+		}
+
+		const products = await this.productRepository.find({
+			where: { category },
+			relations: ['category'],
+		});
+
+		return products.map(
+			product =>
+				({
+					id: product.id,
+					name: product.name,
+					value: product.value,
+					category: product.category.name,
+					imageUrl: product.imageUrl,
+					hasStock: product.hasStock,
+					blocked: product.blocked,
+					description: product.description,
+				} as PublicProductDto)
+		);
 	}
 }

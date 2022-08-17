@@ -23,4 +23,9 @@ export class ProductController {
 	async createProduct(@Body() body: CreateProductDto) {
 		return this.productService.createProduct(body);
 	}
+
+	@Get('getProductsByCategory/:id')
+	async getProductsByCategory(@Param('id') id: number) {
+		return this.productService.getProductsByCategory(id);
+	}
 }
