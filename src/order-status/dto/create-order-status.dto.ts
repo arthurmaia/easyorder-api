@@ -4,6 +4,8 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateOrderStatusDto {
 	@ApiProperty()
 	@IsString()
-	@IsNotEmpty()
+	@IsNotEmpty({
+		message: 'Deve ser informado a descrição do status do pedido!',
+	})
 	description: string;
 }

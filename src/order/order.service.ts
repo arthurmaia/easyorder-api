@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 
 import { OrderStatus } from 'src/order-status/order-status.entity';
 import { OrderStatusEnum } from 'src/utils/constants';
@@ -12,6 +12,21 @@ export class OrderService {
 	constructor(private orderRepository: OrderRepository) {}
 
 	async createOrder(body: CreateOrderDto): Promise<Order> {
+		const currentOrder = await this.orderRepository.findOne({
+			where: {
+				deviceId: body.deviceId,
+				status: { id: OrderStatusEnum.PENDING },
+			},
+			relations: ['status'],
+		});
+
+		if (currentOrder) {
+			throw new HttpException(
+				'Já existe um pedido em aberto neste dispositivo!',
+				400
+			);
+		}
+
 		const order = new Order();
 
 		order.deviceId = body.deviceId;

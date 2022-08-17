@@ -4,6 +4,6 @@ import { IsNotEmpty, IsNumber } from 'class-validator';
 export class CreateBarTableDto {
 	@ApiProperty()
 	@IsNumber()
-	@IsNotEmpty()
+	@IsNotEmpty({ message: 'Deve ser informado um ID externo para a mesa!' })
 	externalId: number;
 }
