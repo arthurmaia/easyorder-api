@@ -9,6 +9,7 @@ import { Exclude } from 'class-transformer';
 
 import { BarTable } from 'src/bar-table/bar-table.entity';
 import { BillHasOrder } from 'src/bill-has-order/bill-has-order.entity';
+import { BillHasPayment } from 'src/bill-has-payment/bill-has-payment.entity';
 
 @Entity()
 export class Bill {
@@ -24,4 +25,8 @@ export class Bill {
 	@Exclude()
 	@OneToMany(_type => BillHasOrder, billHasOrder => billHasOrder.bill)
 	billHasOrders: BillHasOrder[];
+
+	@Exclude()
+	@OneToMany(_type => BillHasPayment, billHasPayment => billHasPayment.id)
+	billHasPayments: BillHasPayment[];
 }

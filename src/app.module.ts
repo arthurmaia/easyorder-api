@@ -14,6 +14,8 @@ import { OrderModule } from './order/order.module';
 import { UserModule } from './user/user.module';
 import { OrderHasProductModule } from './order-has-product/order-has-product.module';
 import { BillHasOrderModule } from './bill-has-order/bill-has-order.module';
+import { BillHasPaymentModule } from './bill-has-payment/bill-has-payment.module';
+import { PaymentModule } from './payment/payment.module';
 
 import { BarTable } from './bar-table/bar-table.entity';
 import { Bill } from './bill/bill.entity';
@@ -24,6 +26,7 @@ import { Product } from './product/product.entity';
 import { User } from './user/user.entity';
 import { OrderHasProduct } from './order-has-product/order-has-product.entity';
 import { BillHasOrder } from './bill-has-order/bill-has-order.entity';
+import { BillHasPayment } from './bill-has-payment/bill-has-payment.entity';
 
 @Module({
 	imports: [
@@ -40,6 +43,7 @@ import { BillHasOrder } from './bill-has-order/bill-has-order.entity';
 				Bill,
 				OrderHasProduct,
 				BillHasOrder,
+				BillHasPayment,
 			],
 			synchronize: true,
 		}),
@@ -53,6 +57,8 @@ import { BillHasOrder } from './bill-has-order/bill-has-order.entity';
 		BillModule,
 		OrderHasProductModule,
 		BillHasOrderModule,
+		BillHasPaymentModule,
+		PaymentModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

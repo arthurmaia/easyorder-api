@@ -14,6 +14,23 @@ export class BillService {
 		private billHasOrderService: BillHasOrderService
 	) {}
 
+	async getBillById(billId: string): Promise<PublicBillDto> {
+		const bill = await this.billRepository.findOne({
+			where: { id: billId },
+			relations: ['barTable'],
+		});
+
+		if (!bill) {
+			return null;
+		}
+
+		return {
+			id: bill.id,
+			isPayed: bill.isPayed,
+			barTableId: bill.barTable.id,
+		} as PublicBillDto;
+	}
+
 	async createBill(barTableId: string): Promise<PublicBillDto> {
 		const barTable = await this.barTableService.getBarTableById(barTableId);
 

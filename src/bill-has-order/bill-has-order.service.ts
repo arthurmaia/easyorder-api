@@ -1,7 +1,7 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { PublicOrderDto } from 'src/order/dto/public-order.dto';
+import { Injectable } from '@nestjs/common';
 
-import { OrderService } from 'src/order/order.service';
+import { PublicOrderDto } from 'src/order/dto/public-order.dto';
+import { PublicProductDto } from 'src/order/dto/public-product.dto';
 import { BillHasOrder } from './bill-has-order.entity';
 import { BillHasOrderRepository } from './bill-has-order.repository';
 import { CreateBillHasOrderDto } from './dto/create-bill-has-order.dto';
@@ -9,9 +9,7 @@ import { CreateBillHasOrderDto } from './dto/create-bill-has-order.dto';
 @Injectable()
 export class BillHasOrderService {
 	constructor(
-		private readonly billHasOrderRepository: BillHasOrderRepository,
-		@Inject(forwardRef(() => OrderService))
-		private readonly orderService: OrderService
+		private readonly billHasOrderRepository: BillHasOrderRepository
 	) {}
 
 	async create(billHasOrder: CreateBillHasOrderDto): Promise<BillHasOrder> {
@@ -30,22 +28,35 @@ export class BillHasOrderService {
 	async getOrderByBillId(billId: string): Promise<PublicOrderDto[]> {
 		const billHasOrders = await this.billHasOrderRepository.find({
 			where: { bill: { id: billId } },
-			relations: ['order'],
+			relations: [
+				'order',
+				'order.status',
+				'order.orderHasProducts',
+				'order.orderHasProducts.product',
+			],
 		});
 
-		const publicOrders: PublicOrderDto[] = [];
+		let publicOrders: PublicOrderDto[] = [];
 
-		for (const billHasOrder of billHasOrders) {
-			const currentOrder = await this.orderService.getOrderById(
-				billHasOrder.order.id
-			);
+		billHasOrders.forEach(({ order }) => {
+			const publicOrder = new PublicOrderDto();
+			publicOrder.id = order.id;
+			publicOrder.deviceId = order.deviceId;
+			publicOrder.status = order.status.description;
 
-			publicOrders.push({
-				id: currentOrder.id,
-				deviceId: currentOrder.deviceId,
-				status: currentOrder.status.description,
+			order.orderHasProducts.forEach(({ quantity, product }) => {
+				const publicProduct = new PublicProductDto();
+
+				publicProduct.id = product.id;
+				publicProduct.name = product.name;
+				publicProduct.value = product.value;
+				publicProduct.quantity = quantity;
+
+				publicOrder.products.push(publicProduct);
 			});
-		}
+
+			publicOrders = [...publicOrders, publicOrder];
+		});
 
 		return publicOrders;
 	}

@@ -4,6 +4,7 @@ import { OrderHasProductRepository } from './order-has-product.repository';
 import { OrderHasProduct } from './order-has-product.entity';
 import { CreateOrderHasProductDto } from './dto/create-order-has-product.dto';
 import { OrderService } from 'src/order/order.service';
+import { Product } from 'src/product/product.entity';
 
 @Injectable()
 export class OrderHasProductService {
@@ -51,5 +52,18 @@ export class OrderHasProductService {
 			where: { order },
 			relations: ['order', 'product'],
 		});
+	}
+
+	async getProductsByOrderId(orderId: string): Promise<Product[]> {
+		const ordersHasProduct = await this.orderHasProductRepository.find({
+			where: { order: { id: orderId } },
+			relations: ['order', 'product'],
+		});
+
+		const products = ordersHasProduct.map(
+			orderHasProduct => orderHasProduct.product
+		);
+
+		return products;
 	}
 }

@@ -74,13 +74,11 @@ export class OrderService {
 	async getOrderById(id: string): Promise<Order> {
 		return await this.orderRepository.findOne({
 			where: { id },
-			relations: ['status'],
+			relations: ['status', 'orderHasProducts', 'orderHasProducts.product'],
 		});
 	}
 
-	async insertProductsIntoOrder(
-		body: InsertProductsOrderDto
-	): Promise<boolean> {
+	async insertProductsIntoOrder(body: InsertProductsOrderDto): Promise<string> {
 		const order = await this.orderRepository.findOne({
 			where: {
 				id: body.orderId,
@@ -136,6 +134,6 @@ export class OrderService {
 			});
 		}
 
-		return true;
+		return `${products.length} produtos inseridos com sucesso!`;
 	}
 }
