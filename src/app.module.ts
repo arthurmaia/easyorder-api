@@ -32,7 +32,7 @@ import { BillHasPayment } from './bill-has-payment/bill-has-payment.entity';
 	imports: [
 		TypeOrmModule.forRoot({
 			type: 'postgres',
-			url: 'postgres://postgres:postgres@localhost:5432/easyorder-db',
+			url: 'postgres://postgres:postgres@postgresdb:5432/easyorder-db',
 			entities: [
 				User,
 				Category,
