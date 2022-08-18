@@ -104,13 +104,37 @@ export class OrderService {
 
 		const { products } = body;
 
-		products.forEach(async product => {
+		const productsIds = products.map(product => product.productId);
+
+		const isDuplicate = productsIds.some((item, idx) => {
+			return productsIds.indexOf(item) != idx;
+		});
+
+		if (isDuplicate) {
+			throw new HttpException(
+				'Não é possível inserir produtos repetidos em um pedido!',
+				400
+			);
+		}
+
+		const hasQuantityLessThenZero = products.some(
+			product => product.quantity <= 0
+		);
+
+		if (hasQuantityLessThenZero) {
+			throw new HttpException(
+				'Não é possível inserir produtos com quantidade menor ou igual a zero!',
+				400
+			);
+		}
+
+		for (const product of products) {
 			await this.orderHasProductService.create({
 				orderId: order.id,
 				productId: product.productId,
 				quantity: product.quantity,
 			});
-		});
+		}
 
 		return true;
 	}

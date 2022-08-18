@@ -28,24 +28,24 @@ export class BillHasOrderService {
 	}
 
 	async getOrderByBillId(billId: string): Promise<PublicOrderDto[]> {
-		const orders = await this.billHasOrderRepository.find({
+		const billHasOrders = await this.billHasOrderRepository.find({
 			where: { bill: { id: billId } },
 			relations: ['order'],
 		});
 
 		const publicOrders: PublicOrderDto[] = [];
 
-		orders.forEach(async ({ order }) => {
-			const currentOrder = await this.orderService.getOrderById(order.id);
+		for (const billHasOrder of billHasOrders) {
+			const currentOrder = await this.orderService.getOrderById(
+				billHasOrder.order.id
+			);
 
 			publicOrders.push({
 				id: currentOrder.id,
 				deviceId: currentOrder.deviceId,
 				status: currentOrder.status.description,
 			});
-		});
-
-		console.log({ publicOrders });
+		}
 
 		return publicOrders;
 	}
