@@ -17,6 +17,12 @@ export class BarTableService implements OnModuleInit {
 		return await this.barTableRepository.save(body);
 	}
 
+	async getBarTableById(id: string): Promise<BarTable> {
+		return await this.barTableRepository.findOne({
+			where: { id },
+		});
+	}
+
 	private async populateBarTable(): Promise<void> {
 		const expectedBarTablesExternalIds = [1, 2, 3];
 

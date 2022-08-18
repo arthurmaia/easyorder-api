@@ -10,6 +10,6 @@ import { BarTableController } from './bar-table.controller';
 	imports: [TypeOrmModule.forFeature([BarTable])],
 	controllers: [BarTableController],
 	providers: [BarTableService, BarTableRepository],
-	exports: [BarTableRepository],
+	exports: [BarTableService],
 })
 export class BarTableModule {}

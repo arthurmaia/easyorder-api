@@ -2,15 +2,15 @@ import { HttpException, Injectable } from '@nestjs/common';
 
 import { ProductRepository } from './product.repository';
 import { Product } from './product.entity';
-import { CategoryRepository } from 'src/category/category.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { PublicProductDto } from './dto/public-product.dto';
+import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class ProductService {
 	constructor(
-		private productRepository: ProductRepository,
-		private categoryRepository: CategoryRepository
+		private readonly productRepository: ProductRepository,
+		private readonly categoryService: CategoryService
 	) {}
 
 	async getProduct(id: string): Promise<PublicProductDto> {
@@ -50,9 +50,11 @@ export class ProductService {
 	async createProduct(product: CreateProductDto): Promise<PublicProductDto> {
 		const { categoryId } = product;
 
-		const category = await this.categoryRepository.findOne({
-			where: { id: categoryId },
-		});
+		if (product.value <= 0) {
+			throw new HttpException(`O valor do produto deve ser maior que 0!`, 400);
+		}
+
+		const category = await this.categoryService.getCategoryById(categoryId);
 
 		if (!category) {
 			throw new HttpException(`Categoria ${categoryId} inexistente!`, 400);
@@ -82,9 +84,7 @@ export class ProductService {
 	}
 
 	async getProductsByCategory(categoryId: number): Promise<PublicProductDto[]> {
-		const category = await this.categoryRepository.findOne({
-			where: { id: categoryId },
-		});
+		const category = await this.categoryService.getCategoryById(categoryId);
 
 		if (!category) {
 			throw new HttpException(`Categoria ${categoryId} inexistente!`, 400);

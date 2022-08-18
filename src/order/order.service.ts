@@ -3,15 +3,22 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { OrderStatus } from 'src/order-status/order-status.entity';
 import { OrderStatusEnum } from 'src/utils/constants';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { InsertProductsOrderDto } from './dto/insert-products-order.dto';
 import { PublicOrderDto } from './dto/public-order.dto';
 import { Order } from './order.entity';
 import { OrderRepository } from './order.repository';
+import { OrderHasProductService } from 'src/order-has-product/order-has-product.service';
+import { BillHasOrderService } from 'src/bill-has-order/bill-has-order.service';
 
 @Injectable()
 export class OrderService {
-	constructor(private orderRepository: OrderRepository) {}
+	constructor(
+		private orderRepository: OrderRepository,
+		private readonly orderHasProductService: OrderHasProductService,
+		private readonly billHasOrderService: BillHasOrderService
+	) {}
 
-	async createOrder(body: CreateOrderDto): Promise<Order> {
+	async createOrder(body: CreateOrderDto): Promise<PublicOrderDto> {
 		const currentOrder = await this.orderRepository.findOne({
 			where: {
 				deviceId: body.deviceId,
@@ -33,7 +40,20 @@ export class OrderService {
 
 		order.status = { id: OrderStatusEnum.PENDING } as OrderStatus;
 
-		return this.orderRepository.save(order);
+		const savedOrder = await this.orderRepository.save(order);
+
+		await this.billHasOrderService.create({
+			billId: body.billId,
+			orderId: savedOrder.id,
+		});
+
+		const publicOrder = new PublicOrderDto();
+
+		publicOrder.id = savedOrder.id;
+		publicOrder.deviceId = savedOrder.deviceId;
+		publicOrder.status = savedOrder.status.description;
+
+		return publicOrder;
 	}
 
 	async findAll(): Promise<PublicOrderDto[]> {
@@ -49,5 +69,49 @@ export class OrderService {
 					status: order.status.description,
 				} as PublicOrderDto)
 		);
+	}
+
+	async getOrderById(id: string): Promise<Order> {
+		return await this.orderRepository.findOne({
+			where: { id },
+			relations: ['status'],
+		});
+	}
+
+	async insertProductsIntoOrder(
+		body: InsertProductsOrderDto
+	): Promise<boolean> {
+		const order = await this.orderRepository.findOne({
+			where: {
+				id: body.orderId,
+			},
+			relations: ['status'],
+		});
+
+		if (!order) {
+			throw new HttpException(
+				'Não existe um pedido em aberto com esse ID!',
+				400
+			);
+		}
+
+		if (order.status.id !== OrderStatusEnum.PENDING) {
+			throw new HttpException(
+				'Não é possível inserir produtos em um pedido já finalizado!',
+				400
+			);
+		}
+
+		const { products } = body;
+
+		products.forEach(async product => {
+			await this.orderHasProductService.create({
+				orderId: order.id,
+				productId: product.productId,
+				quantity: product.quantity,
+			});
+		});
+
+		return true;
 	}
 }

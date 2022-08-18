@@ -6,4 +6,9 @@ export class CreateOrderDto {
 	@IsString()
 	@IsNotEmpty({ message: 'Deve ser informado o ID do dispositivo!' })
 	deviceId: string;
+
+	@ApiProperty()
+	@IsString()
+	@IsNotEmpty({ message: 'Deve ser informado o ID da comanda!' })
+	billId: string;
 }

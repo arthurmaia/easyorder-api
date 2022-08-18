@@ -1,15 +1,16 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
 
 import { OrderHasProductRepository } from './order-has-product.repository';
 import { OrderHasProduct } from './order-has-product.entity';
-import { OrderRepository } from 'src/order/order.repository';
 import { CreateOrderHasProductDto } from './dto/create-order-has-product.dto';
+import { OrderService } from 'src/order/order.service';
 
 @Injectable()
 export class OrderHasProductService {
 	constructor(
 		private orderHasProductRepository: OrderHasProductRepository,
-		private orderRepository: OrderRepository
+		@Inject(forwardRef(() => OrderService))
+		private readonly orderService: OrderService
 	) {}
 
 	async create(
@@ -30,7 +31,11 @@ export class OrderHasProductService {
 			);
 		}
 
-		return await this.orderHasProductRepository.save(createOrderHasProduct);
+		return await this.orderHasProductRepository.save({
+			quantity: createOrderHasProduct.quantity,
+			order: { id: createOrderHasProduct.orderId },
+			product: { id: createOrderHasProduct.productId },
+		});
 	}
 
 	async findAll(): Promise<OrderHasProduct[]> {
@@ -40,9 +45,7 @@ export class OrderHasProductService {
 	}
 
 	async findByOrderId(orderId: string): Promise<OrderHasProduct[]> {
-		const order = await this.orderRepository.findOne({
-			where: { id: orderId },
-		});
+		const order = await this.orderService.getOrderById(orderId);
 
 		return await this.orderHasProductRepository.find({
 			where: { order },

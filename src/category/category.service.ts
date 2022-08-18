@@ -22,6 +22,12 @@ export class CategoryService implements OnModuleInit {
 		await this.categoryRepository.delete(id);
 	}
 
+	async getCategoryById(id: number): Promise<Category> {
+		return await this.categoryRepository.findOne({
+			where: { id },
+		});
+	}
+
 	private async createCategoryTable(): Promise<void> {
 		const defaultCategories = Object.values(CategoryEnum).filter(
 			Number

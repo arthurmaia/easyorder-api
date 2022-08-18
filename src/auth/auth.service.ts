@@ -1,24 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 
-import { Repository } from 'typeorm';
 import { LoginDto } from './dto/login.dto';
-import { User } from 'src/user/user.entity';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
-	constructor(
-		@InjectRepository(User) private userRepository: Repository<User>
-	) {}
+	constructor(private readonly userService: UserService) {}
 
 	async login(body: LoginDto): Promise<string> {
 		const { login, password } = body;
 
-		const user = await this.userRepository.findOne({
-			where: {
-				email: login,
-			},
-		});
+		const user = await this.userService.findUserByEmail(login);
 
 		if (!user) {
 			return 'Usuário não encontrado.';

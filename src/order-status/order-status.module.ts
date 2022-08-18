@@ -10,6 +10,6 @@ import { OrderStatusService } from './order-status.service';
 	imports: [TypeOrmModule.forFeature([OrderStatus])],
 	providers: [OrderStatusService, OrderStatusRepository],
 	controllers: [OrderStatusController],
-	exports: [OrderStatusService, OrderStatusRepository],
+	exports: [OrderStatusService],
 })
 export class OrderStatusModule {}

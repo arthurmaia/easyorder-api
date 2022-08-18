@@ -2,19 +2,20 @@ import { HttpException, Injectable } from '@nestjs/common';
 
 import { BillRepository } from './bill.repository';
 import { PublicBillDto } from './dto/public-bill.dto';
-import { BarTableRepository } from 'src/bar-table/bar-table.repository';
+import { BillHasOrderService } from 'src/bill-has-order/bill-has-order.service';
+import { BarTableService } from 'src/bar-table/bar-table.service';
+import { PublicOrderDto } from 'src/order/dto/public-order.dto';
 
 @Injectable()
 export class BillService {
 	constructor(
 		private billRepository: BillRepository,
-		private barTableRepository: BarTableRepository
+		private barTableService: BarTableService,
+		private billHasOrderService: BillHasOrderService
 	) {}
 
 	async createBill(barTableId: string): Promise<PublicBillDto> {
-		const barTable = await this.barTableRepository.findOne({
-			where: { id: barTableId },
-		});
+		const barTable = await this.barTableService.getBarTableById(barTableId);
 
 		if (!barTable) {
 			throw new HttpException('Mesa não encontrada!', 400);
@@ -42,5 +43,9 @@ export class BillService {
 					barTableId: bill.barTable.id,
 				} as PublicBillDto)
 		);
+	}
+
+	async getOrderByBillId(billId: string): Promise<PublicOrderDto[]> {
+		return await this.billHasOrderService.getOrderByBillId(billId);
 	}
 }

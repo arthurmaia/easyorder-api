@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { PublicOrderDto } from 'src/order/dto/public-order.dto';
 
 import { BillService } from './bill.service';
 import { CreateBillDto } from './dto/create-bill.dto';
@@ -20,5 +21,10 @@ export class BillController {
 	@Get('all')
 	async getAllBills(): Promise<PublicBillDto[]> {
 		return await this.billService.getAllBills();
+	}
+
+	@Get('getOrdersByBillId/:id')
+	async getOrderByBillId(@Param('id') id: string): Promise<PublicOrderDto[]> {
+		return await this.billService.getOrderByBillId(id);
 	}
 }
