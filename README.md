@@ -1,73 +1,72 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# EasyOrder API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descrição
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Esta é uma aplicação em NestJS feita especialmente para matéria Projeto e Desenvolvimento de Sistemas da Informação 1, na faculdade Universidade Federal de Uberlândia (UFU).
 
-## Description
+## Como rodar a aplicação
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Por se tratar de um projeto que envolve tanto uma aplicação em NestJS quanto um banco de dados PostgreSQL, este projeto foi configurado para ser rodado dentro do Docker, para maior praticidade.
 
-## Installation
+- Primeiro passo:
+
+  - Ter o Docker baixado em sua máquina. O download pode ser feito a partir deste link https://docs.docker.com/desktop/install/windows-install/.
+
+- Segundo passo:
+  - Tendo o Docker instalado em sua máquina e com o Docker Desktop baixado em sua máquina, com o terminal dentro da pasta do seu projeto, rode o comando:
 
 ```bash
-$ npm install
+docker-compose up -d
 ```
 
-## Running the app
+_OBS: Este comando acaba por ler os comandos que constam dentro de um arquivo com nome **docker-compose.yml**. O **-d** significa que será executado e este não ficará preso no seu terminal._
+
+_OBS 2: Quando o comando é rodado pela **primeira vez**, pode **demorar** um pouco pois será instalado as imagens usadas nas duas aplicações. Uma imagem é do **node:16-alpine** (uma imagem com a versão 16 do Node) e outra imagem **postgres:alpine** (uma imagem para executar comandos/queries postgres). Após a primeira execução do comando, será rápido, pois as imagens já estarão instaladas no seu docker._
+
+Após executar este comando, sua aplicação já começará a rodar. Pode pode visualiza por meio do comando:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+docker logs application -f
 ```
 
-## Test
+_OBS: Este comando fica listando os logs que acontecem dentro do seu container. Quando o projeto foi configurado, o container responsável por rodar nossa aplicação se chama **application**. Eis o porque do application no nosso comando. O **-f** é para que o mesmo fique mostrando os logs sem parar. Logo, qualquer alteração que for feita dentro da aplicação, automaticamente será atualizado no container e este fará o build novamente._
 
-```bash
-# unit tests
-$ npm run test
+Ou senão pode visualizar por meio do Docker Desktop também.
 
-# e2e tests
-$ npm run test:e2e
+https://prnt.sc/dTY7PI2u_GJp
 
-# test coverage
-$ npm run test:cov
+## Aplicação
+
+A aplicação rodará na porta **3000**. Logo, para consumir algum endpoint desta aplicação, o caminho será **http://localhost:3000**.
+
+Vale lembrar que o projeto utilizou de uma lib externa para documentação de endpoints, o **Swagger**. Com ele, além de todos os endpoints estarem documentados, é possível também executá-los por meio da sua interface. Para acessar a interface, basta inserir **/swagger** no final da URL. Por fim, será **http://localhost:3000/swagger**.
+
+https://prnt.sc/owFJXuGKleOb
+
+Para fins de ensinamento, foi criado um endpoint [GET] /. Para executa-lo, clique no endpoint. Este será expandido e terá um botão "Try it out". Clicando nele, aparecerá um botão "Execute". Clique no botão e o endpoint será executado e terá seu retorno. **Por favor se atente ao retorno deste endpoint, é muito importante!**
+
+https://prnt.sc/v9LAebTfjlwA
+
+## Endpoints usados pelo front-end
+
+```
+[GET] /category/all // Endpoint responsável por retornar todas as possíveis categorias de produtos da aplicação
+
+[GET] /product/getProductsByCategoryId/{id} // Endpoint responsável por retornar os produtos a partir de sua categoria
+
+[POST] /order/create // Endpoint responsável por criar um pedido e vincular com a comando e com o dispositivo usado (celular do usuário)
+
+[POST] /order/insertProductsIntoOrder // Endpoint responsável por inserir produtos e sua quantidade no pedido
+
+[GET] /bill/getOrdersByBillId/{id} // Endpoint responsável por retornar todos os pedidos dentro da comanda
+
+[POST] /payment/create // Endpoint responsável por registrar o pagamento do usuário na comanda
 ```
 
-## Support
+## Descrição geral de como foi feito o projeto
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Basicamente, cada tabela do nosso banco teve seu modulo criado dentro da pasta **src**. Com isso, existe o **.module.ts**, responsável por mapear todas as importações, exportações, provedores e controladores. Logo, na maioria dos arquivos, há o **.controller.ts**, responsável por mapear todos os endpoints disponíveis naquele controller. Temos o **.service.ts**, responsável por toda a regra de negócio do endpoint, e também por fazer a chamada do repositório. Aproveitando, temos o **.repository.ts**, este responsável por ser uma ponte para executar queries SQL dentro da tabela em questão. Por fim, temos o **.entity.ts**, responsável por definir quais as colunas e seus tipos de cada tabela.
 
-## Stay in touch
+Cada **módulo** e **entidade** deve ser mapeada no módulo global **app.module.ts**.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+De cada módulo, apenas **três não possuem controllers** por se tratarem de tabelas auxiliares entre o relacionamento de duas tabelas. Estas foram **bill-has-order**, **bill-has-payment** e **order-has-product**.
