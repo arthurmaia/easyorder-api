@@ -33,7 +33,7 @@ _OBS: Este comando fica listando os logs que acontecem dentro do seu container. 
 
 Ou senão pode visualizar por meio do Docker Desktop também.
 
-https://prnt.sc/dTY7PI2u_GJp
+![download](https://user-images.githubusercontent.com/56277345/185748964-21b4418d-0a81-4f42-8319-d363e4725aec.png)
 
 ## Aplicação
 
@@ -41,11 +41,11 @@ A aplicação rodará na porta **3000**. Logo, para consumir algum endpoint dest
 
 Vale lembrar que o projeto utilizou de uma lib externa para documentação de endpoints, o **Swagger**. Com ele, além de todos os endpoints estarem documentados, é possível também executá-los por meio da sua interface. Para acessar a interface, basta inserir **/swagger** no final da URL. Por fim, será **http://localhost:3000/swagger**.
 
-https://prnt.sc/owFJXuGKleOb
+![download (1)](https://user-images.githubusercontent.com/56277345/185748983-a6376a37-dff6-484c-8d11-87b85d9c6444.png)
 
 Para fins de ensinamento, foi criado um endpoint [GET] /. Para executa-lo, clique no endpoint. Este será expandido e terá um botão "Try it out". Clicando nele, aparecerá um botão "Execute". Clique no botão e o endpoint será executado e terá seu retorno. **Por favor se atente ao retorno deste endpoint, é muito importante!**
 
-https://prnt.sc/v9LAebTfjlwA
+![download (2)](https://user-images.githubusercontent.com/56277345/185748998-cab27844-347e-4596-aae4-7307777ed99d.png)
 
 ## Endpoints usados pelo front-end
 
