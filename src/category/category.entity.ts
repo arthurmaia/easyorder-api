@@ -1,10 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Product } from 'src/product/product.entity';
 
 @Entity()
 export class Category {
-	@PrimaryColumn()
+	@PrimaryGeneratedColumn('increment')
 	id: number;
 
 	@Column()

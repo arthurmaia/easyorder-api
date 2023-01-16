@@ -34,13 +34,14 @@ export class OrderStatusService implements OnModuleInit {
 		});
 
 		const nonExistentStatuses = defaultStatuses.filter(
-			num => !statuses.find(status => status.id === num)
+			num => !statuses.find(status => status.externalId === num)
 		);
 
 		if (nonExistentStatuses.length) {
 			await this.orderStatusRepository.save(
 				nonExistentStatuses.map(num => ({
-					id: num,
+					externalId: num,
+					id: crypto.randomUUID(),
 					description: OrderStatusDescriptions[num],
 				}))
 			);

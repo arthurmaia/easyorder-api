@@ -22,7 +22,7 @@ export class OrderService {
 		const currentOrder = await this.orderRepository.findOne({
 			where: {
 				deviceId: body.deviceId,
-				status: { id: OrderStatusEnum.PENDING },
+				status: { externalId: OrderStatusEnum.PENDING },
 			},
 			relations: ['status'],
 		});
@@ -38,7 +38,7 @@ export class OrderService {
 
 		order.deviceId = body.deviceId;
 
-		order.status = { id: OrderStatusEnum.PENDING } as OrderStatus;
+		order.status = { externalId: OrderStatusEnum.PENDING } as OrderStatus;
 
 		const savedOrder = await this.orderRepository.save(order);
 
@@ -93,7 +93,7 @@ export class OrderService {
 			);
 		}
 
-		if (order.status.id !== OrderStatusEnum.PENDING) {
+		if (order.status.externalId !== OrderStatusEnum.PENDING) {
 			throw new HttpException(
 				'Não é possível inserir produtos em um pedido já finalizado!',
 				400

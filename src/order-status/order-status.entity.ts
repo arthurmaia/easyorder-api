@@ -1,11 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Order } from 'src/order/order.entity';
 
 @Entity()
 export class OrderStatus {
-	@PrimaryColumn()
-	id: number;
+	@PrimaryGeneratedColumn('uuid')
+	id: string;
+
+	@Column()
+	externalId: number;
 
 	@Column()
 	description: string;
