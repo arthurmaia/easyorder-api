@@ -1,7 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 
 import { OrderStatus } from 'src/order-status/order-status.entity';
-import { OrderStatusEnum } from 'src/utils/constants';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { InsertProductsOrderDto } from './dto/insert-products-order.dto';
 import { PublicOrderDto } from './dto/public-order.dto';
@@ -9,20 +8,27 @@ import { Order } from './order.entity';
 import { OrderRepository } from './order.repository';
 import { OrderHasProductService } from 'src/order-has-product/order-has-product.service';
 import { BillHasOrderService } from 'src/bill-has-order/bill-has-order.service';
+import { OrderStatusService } from 'src/order-status/order-status.service';
 
 @Injectable()
 export class OrderService {
 	constructor(
 		private orderRepository: OrderRepository,
 		private readonly orderHasProductService: OrderHasProductService,
-		private readonly billHasOrderService: BillHasOrderService
+		private readonly billHasOrderService: BillHasOrderService,
+		private readonly orderStatusService: OrderStatusService
 	) {}
 
 	async createOrder(body: CreateOrderDto): Promise<PublicOrderDto> {
+		const inProgressOrderStatus =
+			await this.orderStatusService.findByDescription('Em Andamento');
+
 		const currentOrder = await this.orderRepository.findOne({
 			where: {
 				deviceId: body.deviceId,
-				status: { externalId: OrderStatusEnum.PENDING },
+				status: {
+					id: inProgressOrderStatus.id,
+				},
 			},
 			relations: ['status'],
 		});
@@ -38,7 +44,7 @@ export class OrderService {
 
 		order.deviceId = body.deviceId;
 
-		order.status = { externalId: OrderStatusEnum.PENDING } as OrderStatus;
+		order.status = { ...inProgressOrderStatus };
 
 		const savedOrder = await this.orderRepository.save(order);
 
@@ -60,6 +66,8 @@ export class OrderService {
 		const allOrders = await this.orderRepository.find({
 			relations: ['status'],
 		});
+
+		console.log({ allOrders });
 
 		return allOrders.map(
 			order =>
@@ -93,7 +101,10 @@ export class OrderService {
 			);
 		}
 
-		if (order.status.externalId !== OrderStatusEnum.PENDING) {
+		const inProgressOrderStatus =
+			await this.orderStatusService.findByDescription('Em Andamento');
+
+		if (order.status.id !== inProgressOrderStatus.id) {
 			throw new HttpException(
 				'Não é possível inserir produtos em um pedido já finalizado!',
 				400

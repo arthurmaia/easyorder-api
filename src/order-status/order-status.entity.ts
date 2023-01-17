@@ -8,9 +8,6 @@ export class OrderStatus {
 	id: string;
 
 	@Column()
-	externalId: number;
-
-	@Column()
 	description: string;
 
 	@OneToMany(_type => Order, order => order.status)
