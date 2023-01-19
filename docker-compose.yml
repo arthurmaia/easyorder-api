@@ -1,38 +1,26 @@
-version: '3.7'
-
+version: '3'
 services:
-  application:
-    container_name: application
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: development
-    command: yarn start:dev
+  app:
+    build: .
     ports:
-      - '3000:3000'
-    volumes:
-      - .:/usr/src/app
-    networks:
-      - network
-    depends_on:
-      - postgresdb
-
-  postgresdb:
-    image: postgres:alpine
-    container_name: postgresdb
+      - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '1'
+          memory: 256M
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=easyorder-db
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - network
+      - NODE_ENV=production
+    depends_on:
+      - db'
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: easyorder-db
     ports:
-      - 5432:5432
-    restart: always
-
-networks:
-  network:
-volumes:
-  postgres-data:
+      - "5432:5432"
