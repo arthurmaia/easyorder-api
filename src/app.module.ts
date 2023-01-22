@@ -1,9 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppService } from './app.service';
-import { AppController } from './app.controller';
-
 import { AuthModule } from './auth/auth.module';
 import { BarTableModule } from './bar-table/bar-table.module';
 import { BillModule } from './bill/bill.module';
@@ -32,7 +29,7 @@ import { BillHasPayment } from './bill-has-payment/bill-has-payment.entity';
 	imports: [
 		TypeOrmModule.forRoot({
 			type: 'postgres',
-			url: 'postgres://postgres:postgres@postgresdb:5432/easyorder-db',
+			url: 'postgres://postgres:postgres@localhost:5432/easyorder-db',
 			entities: [
 				User,
 				Category,
@@ -60,7 +57,5 @@ import { BillHasPayment } from './bill-has-payment/bill-has-payment.entity';
 		BillHasPaymentModule,
 		PaymentModule,
 	],
-	controllers: [AppController],
-	providers: [AppService],
 })
 export class AppModule {}
