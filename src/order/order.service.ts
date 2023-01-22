@@ -1,6 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
 
-import { OrderStatus } from 'src/order-status/order-status.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { InsertProductsOrderDto } from './dto/insert-products-order.dto';
 import { PublicOrderDto } from './dto/public-order.dto';
@@ -9,17 +8,19 @@ import { OrderRepository } from './order.repository';
 import { OrderHasProductService } from 'src/order-has-product/order-has-product.service';
 import { BillHasOrderService } from 'src/bill-has-order/bill-has-order.service';
 import { OrderStatusService } from 'src/order-status/order-status.service';
+import { BillService } from 'src/bill/bill.service';
 
 @Injectable()
 export class OrderService {
 	constructor(
-		private orderRepository: OrderRepository,
+		private readonly orderRepository: OrderRepository,
 		private readonly orderHasProductService: OrderHasProductService,
 		private readonly billHasOrderService: BillHasOrderService,
-		private readonly orderStatusService: OrderStatusService
+		private readonly orderStatusService: OrderStatusService,
+		private readonly billService: BillService
 	) {}
 
-	async createOrder(body: CreateOrderDto): Promise<PublicOrderDto> {
+	async createOrder(body: CreateOrderDto): Promise<string> {
 		const inProgressOrderStatus =
 			await this.orderStatusService.findByDescription('Em Andamento');
 
@@ -40,6 +41,12 @@ export class OrderService {
 			);
 		}
 
+		const currentBill = await this.billService.getBillById(body.billId);
+
+		if (!currentBill) {
+			throw new HttpException('Comanda não encontrada!', 400);
+		}
+
 		const order = new Order();
 
 		order.deviceId = body.deviceId;
@@ -53,13 +60,7 @@ export class OrderService {
 			orderId: savedOrder.id,
 		});
 
-		const publicOrder = new PublicOrderDto();
-
-		publicOrder.id = savedOrder.id;
-		publicOrder.deviceId = savedOrder.deviceId;
-		publicOrder.status = savedOrder.status.description;
-
-		return publicOrder;
+		return savedOrder.id;
 	}
 
 	async findAll(): Promise<PublicOrderDto[]> {

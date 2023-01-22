@@ -8,6 +8,7 @@ import { OrderService } from './order.service';
 import { OrderHasProductModule } from 'src/order-has-product/order-has-product.module';
 import { BillHasOrderModule } from 'src/bill-has-order/bill-has-order.module';
 import { OrderStatusModule } from 'src/order-status/order-status.module';
+import { BillModule } from 'src/bill/bill.module';
 
 @Module({
 	imports: [
@@ -15,6 +16,7 @@ import { OrderStatusModule } from 'src/order-status/order-status.module';
 		forwardRef(() => OrderHasProductModule),
 		forwardRef(() => BillHasOrderModule),
 		forwardRef(() => OrderStatusModule),
+		forwardRef(() => BillModule),
 	],
 	providers: [OrderService, OrderRepository],
 	controllers: [OrderController],
