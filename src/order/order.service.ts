@@ -9,6 +9,7 @@ import { OrderHasProductService } from 'src/order-has-product/order-has-product.
 import { BillHasOrderService } from 'src/bill-has-order/bill-has-order.service';
 import { OrderStatusService } from 'src/order-status/order-status.service';
 import { BillService } from 'src/bill/bill.service';
+import { OrderStatusEnum } from 'src/utils/constants';
 
 @Injectable()
 export class OrderService {
@@ -22,7 +23,7 @@ export class OrderService {
 
 	async createOrder(body: CreateOrderDto): Promise<string> {
 		const inProgressOrderStatus =
-			await this.orderStatusService.findByDescription('Em Andamento');
+			await this.orderStatusService.findByExternalId(OrderStatusEnum.PENDING);
 
 		if (!inProgressOrderStatus) {
 			throw new HttpException('Status de pedido não encontrado!', 400);
@@ -107,7 +108,7 @@ export class OrderService {
 		}
 
 		const inProgressOrderStatus =
-			await this.orderStatusService.findByDescription('Em Andamento');
+			await this.orderStatusService.findByExternalId(OrderStatusEnum.PENDING);
 
 		if (!inProgressOrderStatus) {
 			throw new HttpException('Status de pedido não encontrado!', 400);
@@ -154,6 +155,8 @@ export class OrderService {
 			});
 		}
 
-		return `${products.length} produtos inseridos com sucesso!`;
+		return `${products.length} ${
+			products.length > 1 ? 'produtos' : 'produto'
+		} inseridos com sucesso!`;
 	}
 }
