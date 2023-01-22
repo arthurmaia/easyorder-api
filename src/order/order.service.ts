@@ -24,6 +24,10 @@ export class OrderService {
 		const inProgressOrderStatus =
 			await this.orderStatusService.findByDescription('Em Andamento');
 
+		if (!inProgressOrderStatus) {
+			throw new HttpException('Status de pedido não encontrado!', 400);
+		}
+
 		const currentOrder = await this.orderRepository.findOne({
 			where: {
 				deviceId: body.deviceId,
@@ -104,6 +108,10 @@ export class OrderService {
 
 		const inProgressOrderStatus =
 			await this.orderStatusService.findByDescription('Em Andamento');
+
+		if (!inProgressOrderStatus) {
+			throw new HttpException('Status de pedido não encontrado!', 400);
+		}
 
 		if (order.status.id !== inProgressOrderStatus.id) {
 			throw new HttpException(
