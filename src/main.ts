@@ -11,17 +11,17 @@ async function bootstrap() {
 
 	app.enableCors({ origin: '*' });
 
-	if (process.env.NODE_ENV !== 'production') {
-		const swaggerConfig = new DocumentBuilder()
-			.setTitle('Easy Order API')
-			.setDescription('Easy Order API Documentation')
-			.setVersion('1.0')
-			.build();
+	// if (process.env.NODE_ENV !== 'production') {
+	const swaggerConfig = new DocumentBuilder()
+		.setTitle('Easy Order API')
+		.setDescription('Easy Order API Documentation')
+		.setVersion('1.0')
+		.build();
 
-		const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+	const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
 
-		SwaggerModule.setup('swagger', app, swaggerDocument);
-	}
+	SwaggerModule.setup('swagger', app, swaggerDocument);
+	// }
 
 	app.useGlobalPipes(new ValidationPipe());
 	app.useGlobalFilters(new HttpExceptionFilter());
