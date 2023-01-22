@@ -10,6 +10,9 @@ export class OrderStatus {
 	@Column()
 	description: string;
 
+	@Column({ unique: true })
+	externalId: number;
+
 	@OneToMany(_type => Order, order => order.status)
 	orders: Order[];
 }
