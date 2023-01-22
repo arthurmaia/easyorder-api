@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 import { AuthModule } from './auth/auth.module';
 import { BarTableModule } from './bar-table/bar-table.module';
@@ -13,35 +14,17 @@ import { OrderHasProductModule } from './order-has-product/order-has-product.mod
 import { BillHasOrderModule } from './bill-has-order/bill-has-order.module';
 import { BillHasPaymentModule } from './bill-has-payment/bill-has-payment.module';
 import { PaymentModule } from './payment/payment.module';
+import { getEnvPath } from './common/helper/env.helper';
 
-import { BarTable } from './bar-table/bar-table.entity';
-import { Bill } from './bill/bill.entity';
-import { Category } from './category/category.entity';
-import { OrderStatus } from './order-status/order-status.entity';
-import { Order } from './order/order.entity';
-import { Product } from './product/product.entity';
-import { User } from './user/user.entity';
-import { OrderHasProduct } from './order-has-product/order-has-product.entity';
-import { BillHasOrder } from './bill-has-order/bill-has-order.entity';
-import { BillHasPayment } from './bill-has-payment/bill-has-payment.entity';
+const envFilePath = getEnvPath(`${__dirname}/common/envs`);
 
 @Module({
 	imports: [
+		ConfigModule.forRoot({ envFilePath, isGlobal: true }),
 		TypeOrmModule.forRoot({
 			type: 'postgres',
-			url: 'postgres://postgres:postgres@postgresdb:5432/easyorder-db',
-			entities: [
-				User,
-				Category,
-				OrderStatus,
-				Order,
-				Product,
-				BarTable,
-				Bill,
-				OrderHasProduct,
-				BillHasOrder,
-				BillHasPayment,
-			],
+			url: process.env.DATABASE_URL,
+			entities: ['dist/**/*.entity{.ts,.js}'],
 			synchronize: true,
 		}),
 		UserModule,
