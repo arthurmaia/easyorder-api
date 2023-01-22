@@ -31,7 +31,7 @@ export class BillService {
 		} as PublicBillDto;
 	}
 
-	async createBill(barTableId: string): Promise<PublicBillDto> {
+	async createBill(barTableId: string): Promise<string> {
 		const barTable = await this.barTableService.getBarTableById(barTableId);
 
 		if (!barTable) {
@@ -40,11 +40,7 @@ export class BillService {
 
 		const createdBill = await this.billRepository.save({ barTable });
 
-		return {
-			id: createdBill.id,
-			isPayed: createdBill.isPayed,
-			barTableId: createdBill.barTable.id,
-		} as PublicBillDto;
+		return createdBill.id;
 	}
 
 	async getAllBills(): Promise<PublicBillDto[]> {
