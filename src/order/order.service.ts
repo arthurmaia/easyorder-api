@@ -10,6 +10,7 @@ import { BillHasOrderService } from 'src/bill-has-order/bill-has-order.service';
 import { OrderStatusService } from 'src/order-status/order-status.service';
 import { BillService } from 'src/bill/bill.service';
 import { OrderStatusEnum } from 'src/utils/constants';
+import { CustomGetProductsResponseDto } from 'src/order-has-product/dto/custom-get-products-response.dto';
 
 @Injectable()
 export class OrderService {
@@ -158,5 +159,11 @@ export class OrderService {
 		return `${products.length} ${
 			products.length > 1 ? 'produtos' : 'produto'
 		} inseridos com sucesso!`;
+	}
+
+	async getProductsByOrderId(
+		id: string
+	): Promise<CustomGetProductsResponseDto[]> {
+		return await this.orderHasProductService.getProductsByOrderId(id);
 	}
 }

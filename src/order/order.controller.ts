@@ -3,18 +3,12 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { PublicOrderDto } from './dto/public-order.dto';
 import { InsertProductsOrderDto } from './dto/insert-products-order.dto';
-import { OrderHasProductService } from 'src/order-has-product/order-has-product.service';
-import { Product } from 'src/product/product.entity';
 
 @ApiTags('order')
 @Controller('order')
 export class OrderController {
-	constructor(
-		private readonly orderService: OrderService,
-		private readonly orderHasProductService: OrderHasProductService
-	) {}
+	constructor(private readonly orderService: OrderService) {}
 
 	@Post('create')
 	async createOrder(@Body() body: CreateOrderDto) {
@@ -33,6 +27,6 @@ export class OrderController {
 
 	@Get('getProductsByOrderId/:id')
 	async getProductsByOrderId(@Param('id') id: string) {
-		return this.orderHasProductService.getProductsByOrderId(id);
+		return this.orderService.getProductsByOrderId(id);
 	}
 }
