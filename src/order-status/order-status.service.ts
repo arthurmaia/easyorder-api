@@ -38,7 +38,7 @@ export class OrderStatusService implements OnModuleInit {
 		});
 	}
 
-	async deleteOrderStatus(id: number): Promise<void> {
+	async deleteOrderStatus(id: string): Promise<void> {
 		await this.orderStatusRepository.delete(id);
 	}
 

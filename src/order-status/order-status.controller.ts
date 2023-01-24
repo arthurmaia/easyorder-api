@@ -20,7 +20,7 @@ export class OrderStatusController {
 	}
 
 	@Delete('delete/:id')
-	async deleteOrderStatus(@Param('id') id: number) {
+	async deleteOrderStatus(@Param('id') id: string) {
 		return await this.orderStatusService.deleteOrderStatus(id);
 	}
 }
