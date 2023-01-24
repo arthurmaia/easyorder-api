@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { OrderStatusController } from './order-status.controller';
 import { OrderStatus } from './order-status.entity';
 import { OrderStatusService } from './order-status.service';
+import { CreateOrderStatusDto } from './dto/create-order-status.dto';
 
 const orderStatusList: OrderStatus[] = [
 	new OrderStatus({
@@ -18,10 +19,9 @@ const orderStatusList: OrderStatus[] = [
 	}),
 ];
 
-const orderStatus = new OrderStatus({
+const createOrderStatusPayload: CreateOrderStatusDto = {
 	description: 'Status 3',
-	externalId: 3,
-});
+};
 
 const deletedOrderStatusId = uuid();
 
@@ -37,7 +37,9 @@ describe('OrderStatus Controller', () => {
 					provide: OrderStatusService,
 					useValue: {
 						findAll: jest.fn().mockResolvedValue(orderStatusList),
-						createOrderStatus: jest.fn().mockResolvedValue(orderStatus),
+						createOrderStatus: jest
+							.fn()
+							.mockResolvedValue(createOrderStatusPayload),
 						deleteOrderStatus: jest.fn().mockResolvedValue(undefined),
 					},
 				},
@@ -74,18 +76,21 @@ describe('OrderStatus Controller', () => {
 
 	describe('createOrderStatus', () => {
 		it('should create a new order status', async () => {
-			const expectedValue = new OrderStatus({ ...orderStatus, id: uuid() });
+			const expectedValue = new OrderStatus({
+				...createOrderStatusPayload,
+				id: uuid(),
+				externalId: 10,
+			});
 
 			jest
 				.spyOn(orderStatusService, 'createOrderStatus')
 				.mockResolvedValue(expectedValue);
 
 			const request = await orderStatusController.createOrderStatus(
-				orderStatus
+				createOrderStatusPayload
 			);
 
-			expect(orderStatus.description).not.toBeFalsy();
-			expect(orderStatus.externalId).not.toBeFalsy();
+			expect(createOrderStatusPayload.description).not.toBeFalsy();
 			expect(request).toEqual(expectedValue);
 		});
 	});
