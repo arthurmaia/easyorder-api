@@ -18,7 +18,7 @@ export class CategoryService implements OnModuleInit {
 		return await this.categoryRepository.find();
 	}
 
-	async deleteCategory(id: string): Promise<void> {
+	async deleteCategory(id: number): Promise<void> {
 		await this.categoryRepository.delete(id);
 	}
 
