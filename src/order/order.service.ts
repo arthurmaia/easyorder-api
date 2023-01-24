@@ -74,8 +74,6 @@ export class OrderService {
 			relations: ['status'],
 		});
 
-		console.log({ allOrders });
-
 		return allOrders.map(
 			order =>
 				({
