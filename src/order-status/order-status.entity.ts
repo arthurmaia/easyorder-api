@@ -15,4 +15,8 @@ export class OrderStatus {
 
 	@OneToMany(_type => Order, order => order.status)
 	orders: Order[];
+
+	constructor(orderStatus?: Partial<OrderStatus>) {
+		Object.assign(this, orderStatus);
+	}
 }
