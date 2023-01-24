@@ -63,8 +63,6 @@ export class OrderHasProductService {
 			relations: ['order', 'product'],
 		});
 
-		console.log({ ordersHasProduct });
-
 		const products: CustomGetProductsResponseDto[] = ordersHasProduct.map(
 			orderHasProduct => ({
 				...orderHasProduct.product,
