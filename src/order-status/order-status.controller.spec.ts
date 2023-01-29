@@ -4,26 +4,11 @@ import { v4 as uuid } from 'uuid';
 import { OrderStatusController } from './order-status.controller';
 import { OrderStatus } from './order-status.entity';
 import { OrderStatusService } from './order-status.service';
-import { CreateOrderStatusDto } from './dto/create-order-status.dto';
-
-const orderStatusList: OrderStatus[] = [
-	new OrderStatus({
-		id: uuid(),
-		description: 'Status 1',
-		externalId: 1,
-	}),
-	new OrderStatus({
-		id: uuid(),
-		description: 'Status 2',
-		externalId: 2,
-	}),
-];
-
-const createOrderStatusPayload: CreateOrderStatusDto = {
-	description: 'Status 3',
-};
-
-const deletedOrderStatusId = uuid();
+import {
+	orderStatusList,
+	createOrderStatusPayload,
+	deletedOrderStatusId,
+} from 'src/tests/order-status.data';
 
 describe('OrderStatus Controller', () => {
 	let orderStatusController: OrderStatusController;

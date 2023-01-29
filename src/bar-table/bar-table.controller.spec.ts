@@ -1,25 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { v4 as uuid } from 'uuid';
 
 import { BarTableController } from './bar-table.controller';
 import { BarTable } from './bar-table.entity';
 import { BarTableService } from './bar-table.service';
-import { CreateBarTableDto } from './dto/create-bar-table.dto';
-
-const barTableList: BarTable[] = [
-	new BarTable({
-		id: uuid(),
-		externalId: 1,
-	}),
-	new BarTable({
-		id: uuid(),
-		externalId: 2,
-	}),
-];
-
-const createdBarTable: CreateBarTableDto = {
-	externalId: 3,
-};
+import { barTableList, createdBarTable } from 'src/tests/bar-table.data';
 
 describe('BarTable Controller', () => {
 	let barTableController: BarTableController;

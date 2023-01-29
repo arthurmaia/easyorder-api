@@ -1,26 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
+import {
+	categoryList,
+	createdCategoryPayload,
+	deletedCategoryId,
+} from 'src/tests/category.data';
 import { CategoryController } from './category.controller';
 import { Category } from './category.entity';
 import { CategoryService } from './category.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-
-const categoryList: Category[] = [
-	new Category({
-		id: 1,
-		name: 'Category 1',
-	}),
-	new Category({
-		id: 2,
-		name: 'Category 2',
-	}),
-];
-
-const createdCategoryPayload: CreateCategoryDto = {
-	name: 'Category 3',
-};
-
-const deletedCategoryId = 2;
 
 describe('Category Controller', () => {
 	let categoryController: CategoryController;
