@@ -29,4 +29,8 @@ export class Order {
 	@Exclude()
 	@OneToMany(_type => BillHasOrder, billHasOrder => billHasOrder.order)
 	billHasOrders: BillHasOrder[];
+
+	constructor(order?: Partial<Order>) {
+		Object.assign(this, order);
+	}
 }
