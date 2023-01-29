@@ -12,4 +12,8 @@ export class BillHasPayment {
 
 	@ManyToOne(_type => Bill, bill => bill.billHasPayments)
 	bill: Bill;
+
+	constructor(billHasPayment?: Partial<BillHasPayment>) {
+		Object.assign(this, billHasPayment);
+	}
 }
