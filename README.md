@@ -70,3 +70,19 @@ Basicamente, cada tabela do nosso banco teve seu modulo criado dentro da pasta *
 Cada **módulo** e **entidade** deve ser mapeada no módulo global **app.module.ts**.
 
 De cada módulo, apenas **três não possuem controllers** por se tratarem de tabelas auxiliares entre o relacionamento de duas tabelas. Estas foram **bill-has-order**, **bill-has-payment** e **order-has-product**.
+
+## Testes nos **CONTROLLERS**
+
+Para rodar os testes, basta rodar
+
+```bash
+npm run test
+```
+
+- [x] Order
+- [x] Bill
+- [x] Payment
+- [x] Category
+- [x] Product
+- [x] BarTable
+- [x] OrderStatus
