@@ -12,4 +12,8 @@ export class BarTable {
 
 	@OneToMany(_type => Bill, bill => bill.barTable)
 	bills: Bill[];
+
+	constructor(barTable?: Partial<BarTable>) {
+		Object.assign(this, barTable);
+	}
 }
