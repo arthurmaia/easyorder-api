@@ -11,12 +11,12 @@ export class ProductController {
 
 	@Get('all')
 	async getAllProducts() {
-		return this.productService.getProducts();
+		return this.productService.getAllProducts();
 	}
 
 	@Get(':id')
 	async getProductById(@Param('id') id: string) {
-		return this.productService.getProduct(id);
+		return this.productService.getProductById(id);
 	}
 
 	@Post('create')

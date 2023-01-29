@@ -44,4 +44,8 @@ export class Product {
 
 	@Column({ default: defaultProductImageUrl })
 	imageUrl: string;
+
+	constructor(product?: Partial<Product>) {
+		Object.assign(this, product);
+	}
 }
