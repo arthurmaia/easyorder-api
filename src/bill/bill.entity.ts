@@ -29,4 +29,8 @@ export class Bill {
 	@Exclude()
 	@OneToMany(_type => BillHasPayment, billHasPayment => billHasPayment.id)
 	billHasPayments: BillHasPayment[];
+
+	constructor(bill?: Partial<Bill>) {
+		Object.assign(this, bill);
+	}
 }
