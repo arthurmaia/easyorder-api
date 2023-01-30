@@ -74,6 +74,9 @@ describe('Order Controller', () => {
 				insertProductsIntoOrderPayload
 			);
 
+			insertProductsIntoOrderPayload.products.forEach(product => {
+				expect(product.quantity).toBeGreaterThan(0);
+			});
 			expect(result).toBeUndefined();
 		});
 	});
